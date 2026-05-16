@@ -1,106 +1,113 @@
-import React from "react";
-import { Clock, X, Users, Utensils, Hash } from "lucide-react";
+import React, { useState } from "react";
+import { Clock, X, Users, Utensils, Hash, ChevronDown } from "lucide-react";
 
-const RecipeModel = ({ onClose }) => {
+const RecipeModel = ({ recipe, onClose }) => {
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  if (!recipe) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/70 backdrop-blur-sm">
-      {/* Modal Container */}
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/70 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div 
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 text-stone-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 bg-red-500 hover:bg-red-600 text-white rounded-full z-20"
         >
           <X size={24} />
         </button>
 
-        <div className="p-8 md:p-12">
-          {/* Header Section */}
-          <header className="mb-10 max-w-2xl">
-            <h2 className="text-4xl font-extrabold text-stone-800 mb-4 tracking-tight">
-              Garden Fresh Pesto Pasta
-            </h2>
-            <p className="text-lg text-stone-500 leading-relaxed">
-              A vibrant, aromatic dish featuring hand-crushed basil, toasted pine nuts, and aged parmesan cheese.
-            </p>
-          </header>
+        {/* Recipe Image */}
+        {recipe.image && (
+          <img 
+            src={recipe.image} 
+            alt={recipe.name}
+            className="w-full h-80 object-cover rounded-t-3xl"
+          />
+        )}
 
-          {/* Quick Stats Grid */}
-          <div className="grid grid-cols-3 gap-1 mb-12 bg-emerald-900 rounded-2xl overflow-hidden shadow-lg">
-            <div className="flex flex-col items-center justify-center p-6 text-emerald-50">
-              <Clock className="w-5 h-5 mb-2 opacity-80" />
-              <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Prep</span>
-              <span className="text-xl font-semibold">15 Min</span>
+        <div className="p-8">
+          <h1 className="text-4xl font-bold mb-3">{recipe.name}</h1>
+          <p className="text-gray-600 mb-8">{recipe.description}</p>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4 mb-8 bg-emerald-900 text-white p-6 rounded-lg">
+            <div className="text-center">
+              <Clock size={20} className="mx-auto mb-2" />
+              <p className="text-sm">Prep: {recipe.prepTime}</p>
             </div>
-            <div className="flex flex-col items-center justify-center p-6 bg-emerald-800 text-emerald-50">
-              <Utensils className="w-5 h-5 mb-2 opacity-80" />
-              <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Cook</span>
-              <span className="text-xl font-semibold">10 Min</span>
+            <div className="text-center">
+              <Utensils size={20} className="mx-auto mb-2" />
+              <p className="text-sm">Cook: {recipe.cookTime}</p>
             </div>
-            <div className="flex flex-col items-center justify-center p-6 text-emerald-50">
-              <Users className="w-5 h-5 mb-2 opacity-80" />
-              <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Serves</span>
-              <span className="text-xl font-semibold">4</span>
+            <div className="text-center">
+              <Users size={20} className="mx-auto mb-2" />
+              <p className="text-sm">Serves: {recipe.servings}</p>
             </div>
           </div>
 
-          {/* Main Content: Ingredients & Instructions */}
-          <div className="grid md:grid-cols-2 gap-12">
-            
-            {/* Ingredients Column */}
+          {/* Ingredients */}
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
             <section>
-              <h3 className="text-2xl font-bold text-stone-800 mb-6 flex items-center gap-2">
-                <div className="w-2 h-8 bg-amber-500 rounded-full" />
-                Ingredients
-              </h3>
-              <ul className="space-y-4">
-                {["500g Penne Pasta", "2 cups Fresh Basil", "3 cloves Garlic", "1/2 cup Parmesan", "Extra Virgin Olive Oil"].map((ingredient, i) => (
-                  <li key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-stone-50 transition-colors border border-transparent hover:border-stone-100">
-                    <div className="w-5 h-5 rounded-md border-2 border-emerald-500 flex-shrink-0" />
-                    <span className="text-stone-700 font-medium">{ingredient}</span>
+              <h2 className="text-2xl font-bold mb-4">Ingredients</h2>
+              <ul className="space-y-2">
+                {recipe.ingredients?.map((item, i) => (
+                  <li key={i} className="flex items-center gap-2">
+                    <input type="checkbox" className="w-4 h-4" />
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </section>
 
-            {/* Instructions Column */}
+            {/* Instructions */}
             <section>
-              <h3 className="text-2xl font-bold text-stone-800 mb-6 flex items-center gap-2">
-                <div className="w-2 h-8 bg-emerald-600 rounded-full" />
-                Preparation
-              </h3>
-              <div className="space-y-8">
-                {[1, 2, 3].map((step) => (
-                  <div key={step} className="flex gap-4">
-                    <span className="text-4xl font-black text-emerald-100 leading-none">
-                      0{step}
-                    </span>
-                    <p className="text-stone-600 leading-relaxed pt-1">
-                      Instruction
-                    </p>
-                  </div>
-                ))}
-              </div>
+              <button
+                onClick={() => setShowInstructions(!showInstructions)}
+                className="w-full flex items-center justify-between bg-emerald-100 hover:bg-emerald-200 p-4 rounded-lg mb-4 font-bold"
+              >
+                <span>Preparation Instructions</span>
+                <ChevronDown 
+                  size={20}
+                  className={`transform transition ${showInstructions ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {showInstructions && (
+                <div className="space-y-4">
+                  {recipe.instructions?.map((step, i) => (
+                    <div key={i} className="flex gap-4">
+                      <span className="text-2xl font-bold text-emerald-600 flex-shrink-0">
+                        {i + 1}
+                      </span>
+                      <p className="text-gray-700">{step}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           </div>
 
-          {/* Footer Tags */}
-          <footer className="mt-16 pt-8 border-t border-stone-100">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="flex items-center gap-1 text-sm font-bold text-stone-400 uppercase tracking-tighter mr-2">
-                <Hash size={14} /> Meta Tags:
-              </span>
-              {["Italian", "Vegetarian", "Quick Lunch"].map((tag) => (
-                <span 
-                  key={tag} 
-                  className="px-4 py-1.5 bg-amber-50 text-amber-700 text-xs font-bold rounded-full border border-amber-100"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </footer>
+          {/* Tags */}
+          {recipe.tags && (
+            <footer className="border-t pt-4">
+              <p className="text-sm font-bold text-gray-500 mb-2">TAGS:</p>
+              <div className="flex flex-wrap gap-2">
+                {recipe.tags.map((tag) => (
+                  <span key={tag} className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </footer>
+          )}
         </div>
       </div>
     </div>
