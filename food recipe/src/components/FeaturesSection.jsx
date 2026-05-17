@@ -1,7 +1,5 @@
 import React from 'react';
 
-// 1. In a real project, we store this data outside the component 
-// to keep the logic clean and easy to edit later.
 const FEATURES_DATA = [
     {
         title: "Fresh Ingredients",
@@ -28,7 +26,6 @@ function FeaturesSection() {
         <section className="features-wrapper py-24 bg-light-neutral-100">
             <div className="container mx-auto px-6 max-w-7xl">
                 
-                {/* Header Section: Centered and meaningful */}
                 <header className="text-center mb-20">
                     <span className="text-orange-500 font-bold tracking-widest uppercase text-sm">
                         Why Choose Us
@@ -40,13 +37,13 @@ function FeaturesSection() {
                         Beyond just recipes, we provide a lifestyle built on simplicity, 
                         freshness, and the joy of a home-cooked meal.
                     </p>
-                    {/* A "man-made" design touch: a small centered divider */}
+                    
                     <div className="mt-8 flex justify-center">
                         <div className="h-1.5 w-16 bg-green-500 rounded-full"></div>
                     </div>
                 </header>
 
-                {/* The Grid: Responsive and clean */}
+               
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {FEATURES_DATA.map((item, i) => (
                         <FeatureCard key={`feature-${i}`} data={item} />
@@ -63,7 +60,7 @@ const FeatureCard = ({ data }) => {
         <div className="group bg-white p-10 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-transparent hover:border-green-100">
             <div className="flex flex-col items-center text-center">
                 
-                {/* Icon Box with dynamic accent colors */}
+                
                 <div className={`w-20 h-20 ${accentColor} rounded-3xl flex items-center justify-center mb-8 group-hover:rotate-6 transition-transform duration-300`}>
                     <span className="text-4xl" role="img" aria-label={title}>
                         {emoji}

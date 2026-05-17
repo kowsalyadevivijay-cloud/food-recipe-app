@@ -10,12 +10,12 @@ function Header() {
     <div className="bg-light-neutral-100 backdrop-blur-md shadow-md sticky top-0 z-50 border-b border-light-neutral-200">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
 
-        {/* Logo */}
+       
         <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-all duration-300">
           <img src={Logo} className="logo-img" alt="Company Logo" />
         </Link>
 
-        {/* Desktop Navigation */}
+       
         <nav className="hidden md:flex items-center space-x-6">
           <Link
             to="/"
@@ -42,7 +42,7 @@ function Header() {
           </Link>
         </nav>
 
-        {/* Browse Recipes Button (Desktop Only) */}
+        
         <Link
           to="/recipes"
           className="hidden md:block bg-primary text-light-neutral-0 px-6 py-3 rounded-xl 
@@ -51,7 +51,7 @@ function Header() {
           Browse Recipes
         </Link>
 
-        {/* Mobile Menu Button */}
+       
         <button
           className="md:hidden p-2 text-gray-600 hover:text-gray-800 transition-all"
           aria-label="Toggle menu"
@@ -62,7 +62,7 @@ function Header() {
 
       </div>
 
-      {/* Mobile Menu */}
+      
       {isMenuOpen && (
         <div className="md:hidden bg-light-neutral-0 border-t border-light-neutral-200 shadow-sm">
           <nav className="flex flex-col space-y-3 px-4 py-4">

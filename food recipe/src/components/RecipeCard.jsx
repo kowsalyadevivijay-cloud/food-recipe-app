@@ -1,7 +1,7 @@
 import React from "react";
 import { Clock, Users } from "lucide-react";
 
-function RecipeCard({ recipe, onViewRecipe }) {
+function RecipeCard({ recipe, onViewRecipe, isFavorite, onToggleFavorite }) {
   const {
     title = "Untitled recipe",
     description = "No description available",
@@ -20,6 +20,15 @@ function RecipeCard({ recipe, onViewRecipe }) {
           className="w-full h-56 object-cover group-hover:scale-110 transition-all duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-green-600/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite && onToggleFavorite(recipe);
+          }}
+          className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200"
+        >
+          {isFavorite ? "❤️" : "🤍"}
+        </button>
       </div>
       <div className="p-6">
         <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1">{title}</h3>

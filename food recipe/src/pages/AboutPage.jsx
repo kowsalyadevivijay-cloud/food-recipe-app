@@ -3,12 +3,6 @@ import { Utensils, Users, Clock, Award, Heart, Leaf, ChevronRight, Zap, Globe } 
 import KitchenImage from "./../assets/images/Kitchen.jpg";
 import { ArrowRight } from "lucide-react";
 
-
-/**
- * AboutPage - Light & Bright "Morning Harvest" Theme
- * Primary Colors: Emerald-600, Amber-500, Sky-400
- * Background: Pearl White / Soft Sand
- */
 function AboutPage() {
   const stats = [
     { number: "10K+", label: "Happy Cooks", icon: Users, color: "from-emerald-400 to-teal-500" },
@@ -47,7 +41,7 @@ function AboutPage() {
   return (
     <div className="min-h-screen bg-[#FDFDFB] text-slate-800 selection:bg-emerald-100 selection:text-emerald-900">
       
-      {/* HERO SECTION - Updated to Emerald/Orange Gradient */}
+  
 
 <section className="relative py-24 lg:py-36 overflow-hidden bg-gradient-to-br from-emerald-50 via-orange-50 to-emerald-100">
 
@@ -74,7 +68,7 @@ We’re redefining the art of home cooking. Just pure, soul-warming food designe
 </div>
 
 </section> 
-      {/* 2. STATS - Floating Glass Style */}
+     
       <section className="px-6 -mt-8 relative z-20">
         <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {stats.map((stat, i) => (
@@ -89,8 +83,7 @@ We’re redefining the art of home cooking. Just pure, soul-warming food designe
         </div>
       </section>
 
-      {/* 3. MISSION - Warm Asymmetry */}
-       {/* MISSION SECTION */}
+     
 
 <section className="py-24 lg:py-32 bg-stone-50">
 
@@ -122,7 +115,6 @@ A Kitchen Born <br/>
 
 <div className="order-1 lg:order-2 relative group flex justify-center">
 
-{/* Dynamic Glow updated to Emerald/Orange */}
 
 <div className="absolute -inset-4 bg-gradient-to-r from-emerald-400 to-orange-400 rounded-[2.5rem] blur-2xl opacity-30"></div>
 
@@ -142,7 +134,7 @@ A Kitchen Born <br/>
 
 </section> 
 
-      {/* 4. VALUES - Card Bento Grid */}
+      
       <section className="py-24 bg-[#F7F7F2]">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-center text-3xl font-black text-slate-900 mb-16 tracking-tight">The Three Pillars</h2>
@@ -160,7 +152,7 @@ A Kitchen Born <br/>
         </div>
       </section>
 
-      {/* 5. TEAM - Simple & Transparent */}
+    
       <section className="py-32 px-6">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-slate-900 mb-20 tracking-tight">The Makers</h2>

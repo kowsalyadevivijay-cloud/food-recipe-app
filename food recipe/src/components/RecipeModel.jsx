@@ -28,13 +28,13 @@ const RecipeModel = ({ recipe, onClose }) => {
         {recipe.image && (
           <img 
             src={recipe.image} 
-            alt={recipe.name}
+            alt={recipe.title}
             className="w-full h-80 object-cover rounded-t-3xl"
           />
         )}
 
         <div className="p-8">
-          <h1 className="text-4xl font-bold mb-3">{recipe.name}</h1>
+          <h1 className="text-4xl font-bold mb-3">{recipe.title}</h1>
           <p className="text-gray-600 mb-8">{recipe.description}</p>
 
           {/* Stats */}

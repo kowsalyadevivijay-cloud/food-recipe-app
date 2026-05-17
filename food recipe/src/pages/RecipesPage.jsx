@@ -4,6 +4,7 @@ import RecipeGrid from "../components/RecipeGrid.jsx";
 import { RefreshCw } from "lucide-react";
 import RecipeModel from "../components/RecipeModel.jsx";
 import { useRecipes } from "../hooks/useRecipes.js";
+import { transformRecipe } from "../Services/recipeApi";
 
 function RecipesPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,6 +14,8 @@ function RecipesPage() {
   const [categories, setCategories] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isModelOpen, setIsModelOpen] = useState(false);
+  const [fetchedRecipes, setFetchedRecipes] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
   const {
     recipes,
@@ -31,15 +34,7 @@ function RecipesPage() {
       setCategories(cats);
     };
     loadCategories();
-  }, [getCategories]);
-
-  const filteredRecipes = useMemo(() => {
-    return recipes.filter((recipe) => {
-      const matchesPrepTime = maxPrepTime === "Any" || recipe.prepTime <= parseInt(maxPrepTime);
-      const matchesCookTime = maxCookTime === "Any" || recipe.cookTime <= parseInt(maxCookTime);
-      return matchesPrepTime && matchesCookTime;
-    });
-  }, [recipes, maxPrepTime, maxCookTime]);
+  }, []);
 
   const handleSearch = async (term) => {
     setSearchTerm(term);
@@ -50,14 +45,31 @@ function RecipesPage() {
     }
   };
 
-  const handleCategoryChange = async (category) => {
+  const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    if (category) {
-      await fetchRecipeByCategory(category);
-    } else {
-      await refetch();
-    }
   };
+
+  useEffect(() => {
+    const fetchByCategory = async () => {
+      try {
+        const isAll = !selectedCategory || selectedCategory === "All";
+        const endpoint = isAll
+          ? `https://www.themealdb.com/api/json/v1/1/search.php?s=`
+          : `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(
+              selectedCategory
+            )}`;
+        const res = await fetch(endpoint);
+        const data = await res.json();
+        const meals = data.meals || [];
+        const transformed = meals.map(transformRecipe).filter(Boolean);
+        setFetchedRecipes(transformed);
+      } catch (err) {
+        setFetchedRecipes([]);
+      }
+    };
+
+    fetchByCategory();
+  }, [selectedCategory]);
 
   const handlePrepTimeChange = (value) => {
     setMaxPrepTime(value);
@@ -67,15 +79,52 @@ function RecipesPage() {
     setMaxCookTime(value);
   };
 
-  const handleViewRecipe = (recipe) => {
-    setSelectedRecipe(recipe);
-    setIsModelOpen(true);
+  const handleViewRecipe = async (recipe) => {
+    try {
+      const hasDetails = recipe && (recipe.instructions?.length || recipe.ingredients?.length);
+      if (!hasDetails) {
+        const id = recipe.idMeal || recipe.id;
+        if (id) {
+          const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+          const data = await res.json();
+          const detailed = data.meals ? data.meals[0] : null;
+          const transformed = transformRecipe(detailed) || recipe;
+          setSelectedRecipe(transformed);
+          setIsModelOpen(true);
+          return;
+        }
+      }
+
+      setSelectedRecipe(recipe);
+      setIsModelOpen(true);
+    } catch (err) {
+      setSelectedRecipe(recipe);
+      setIsModelOpen(true);
+    }
   };
 
   const handleCloseModel = () => {
     setIsModelOpen(false);
     setSelectedRecipe(null);
   };
+
+  const handleToggleFavorite = (recipe) => {
+    const recipeId = recipe.id || recipe.idMeal;
+    setFavorites((prevFavorites) =>
+      prevFavorites.some((fav) => (fav.id || fav.idMeal) === recipeId)
+        ? prevFavorites.filter((fav) => (fav.id || fav.idMeal) !== recipeId)
+        : [...prevFavorites, recipe]
+    );
+  };
+
+  const filteredRecipes = useMemo(() => {
+    const source = selectedCategory ? fetchedRecipes : recipes;
+    return source.filter((recipe) => {
+      const matchesPrepTime = maxPrepTime === "Any" || (recipe.prepTime <= parseInt(maxPrepTime));
+      const matchesCookTime = maxCookTime === "Any" || (recipe.cookTime <= parseInt(maxCookTime));
+      return matchesPrepTime && matchesCookTime;
+    });
+  }, [recipes, fetchedRecipes, selectedCategory, maxPrepTime, maxCookTime]);
 
   return (
     <div className="min-h-screen bg-[#f8f5f2]">
@@ -115,7 +164,7 @@ function RecipesPage() {
         )}
       </div>
 
-      {/* FILTER BAR */}
+     
       <div className="py-6">
         <div className="container mx-auto px-4">
           <FilterBar
@@ -128,16 +177,18 @@ function RecipesPage() {
         </div>
       </div>
 
-      {/* RECIPE GRID */}
+    
       <div className="container mx-auto px-4 py-12">
         <RecipeGrid
           recipes={filteredRecipes}
           onViewRecipe={handleViewRecipe}
+          onToggleFavorite={handleToggleFavorite}
+          favorites={favorites}
           isLoading={loading}
         />
       </div>
 
-      {/* RECIPE MODEL */}
+     
       {isModelOpen && selectedRecipe && (
         <RecipeModel
           recipe={selectedRecipe}

@@ -1,7 +1,7 @@
 import React from "react";
 import RecipeCard from "./RecipeCard";
 
-function RecipeGrid({ recipes, onViewRecipe, isLoading }) {
+function RecipeGrid({ recipes, onViewRecipe, isLoading, favorites, onToggleFavorite }) {
 
   if (isLoading) {
     return (
@@ -37,11 +37,18 @@ function RecipeGrid({ recipes, onViewRecipe, isLoading }) {
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {recipes.map((recipe) => (
-        <RecipeCard 
-          recipe={recipe}                 // Pass the recipe data
-          onViewRecipe={onViewRecipe}/>          // Pass the click handler/>
-      ))}
+      {recipes.map((recipe, i) => {
+        const isFavorite = favorites.some((fav) => (fav.id || fav.idMeal) === (recipe.id || recipe.idMeal));
+        return (
+          <RecipeCard
+            key={recipe.id || recipe.idMeal || recipe.title || i}
+            recipe={recipe}
+            onViewRecipe={onViewRecipe}
+            isFavorite={isFavorite}
+            onToggleFavorite={onToggleFavorite}
+          />
+        );
+      })}
     </div>
   );
 }

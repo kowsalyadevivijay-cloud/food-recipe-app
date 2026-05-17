@@ -13,9 +13,8 @@ export const useRecipes = () => {
             const apiRecipes = await recipeApi.getRandomRecipes(8);
             const transformedRecipes = apiRecipes.map(transformRecipe).filter(Boolean);
             setRecipes(transformedRecipes);
-        }catch (error) {
+        } catch (error) {
             setError("Failed to fetch recipes")
-            console.error("Error fetching recipes:", error)
         } finally {
             setLoading(false)
         }
@@ -34,7 +33,6 @@ export const useRecipes = () => {
     }
     catch (error) {
         setError("Failed to fetch recipes");
-        console.error("Error fetching recipes:", error);
     } finally {
         setLoading(false);
     }
@@ -51,8 +49,7 @@ const fetchRecipeByCategory = async (category) => {
         );
         setRecipes(detailedRecipes.filter(Boolean));
     } catch (error) {
-        setError("Failed to fetch recipes ");
-        console.error("Error fetching recipes :", error);
+        setError("Failed to fetch recipes");
     } finally{
         setLoading(false);
     }
@@ -62,7 +59,6 @@ const getCategories = async () => {
         const categories = await recipeApi.getCategories();
         return categories.map(cat => cat.strCategory);
     } catch (error) {
-        console.error("Error fetching categories:", error);
         return [];
     }
 };
