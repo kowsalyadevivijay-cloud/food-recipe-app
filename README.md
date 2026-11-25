@@ -2,7 +2,7 @@
 
 A responsive recipe browsing app built with **React** and **Tailwind CSS**. Recipes come from the public [TheMealDB API](https://www.themealdb.com/api.php). Users can search, filter, view full recipes and save their favourites.
 
-🔗 **Live demo:** https://food-recipe-app-321.netlify.app/
+🔗 **Live demo:** https://food-recipesforeveryone.netlify.app
 
 ## ✨ Features
 
